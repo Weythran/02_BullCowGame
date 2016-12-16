@@ -1,6 +1,10 @@
 # .GITIGNORE file borrowed from BattleTank
 #
 
+# ST -- ignore the Debug folders
+Debug/*
+BullCowGame/Debug/*
+
 *.VC.db
 .vs/
 
