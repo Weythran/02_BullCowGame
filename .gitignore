@@ -1,11 +1,18 @@
-# .GITIGNORE file borrowed from BattleTank
-#
+# .GITIGNORE file borrowed from BattleTank #
+############################################
 
 # ST -- ignore the Debug folders
 Debug/*
 BullCowGame/Debug/*
 
+######################
+# VS-Generated Files #
+######################
+
 *.VC.db
+*.suo
+*.VC.opendb
+*.sln
 .vs/
 
 # Compiled Object files
