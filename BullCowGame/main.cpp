@@ -38,8 +38,11 @@ void PrintIntro() {
 
 
 void PlayGame() {
+	BCGame.Reset();
 	int MaxTries = BCGame.GetMaxTries();
+
 	std::cout << MaxTries << std::endl;
+
 	// Loop for the number of turns for the number of guesses.
 	for (int count = 1; count <= MaxTries; count++)
 	{
