@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <string>
+#include <windows.h>
 #include "FBullCowGame.h"
 
 using FText = std::string;
@@ -14,6 +15,7 @@ using uint32 = unsigned int;
 void PrintIntro();
 void PlayGame();
 void PrintGameSummary(FBullCowCount BullCowCount);
+void ClearConsole();
 FText GetValidGuess();
 bool AskToPlayAgain();
 FBullCowGame BCGame; // Instantiate a new game.
@@ -24,6 +26,7 @@ int main()
 {
 	bool bPlayAgain = false;
 	do {
+		ClearConsole(); // Clear the screen.
 		PrintIntro();
 		PlayGame();
 		bPlayAgain = AskToPlayAgain();
@@ -99,13 +102,13 @@ FText GetValidGuess() {
 			std::cout << "-letter word..." << std::endl;
 			break;
 		case EGuessStatus::Not_Isogram:
-			std::cout << "Please enter a word without repeating letters..." << std::endl;
+			std::cout << std::endl << "Please enter a word without repeating letters..." << std::endl;
 			break;
 		case EGuessStatus::Not_Lowercase:
-			std::cout << "Please enter a lower-case word..." << std::endl;
+			std::cout << std::endl << "Please enter a lower-case word..." << std::endl;
 			break;
 		case EGuessStatus::Invalid_Status:
-			std::cout << "ERROR: EGuessStatus::Invalid_Status received in BCGame.GetValidGuess()! ###" << std::endl;
+			std::cout << std::endl << "ERROR: EGuessStatus::Invalid_Status received in GetValidGuess()!" << std::endl;
 			break;
 		default:
 			// Assume the guess is valid.
@@ -165,4 +168,22 @@ bool AskToPlayAgain()
 	std::cout << std::endl;
 
 	return ((Response[0] == 'y') || (Response[0] == 'Y'));
+}
+
+
+void ClearConsole() {
+	COORD topLeft = { 0, 0 };
+	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+	CONSOLE_SCREEN_BUFFER_INFO screen;
+	DWORD written;
+
+	GetConsoleScreenBufferInfo(console, &screen);
+	FillConsoleOutputCharacterA(
+		console, ' ', screen.dwSize.X * screen.dwSize.Y, topLeft, &written
+	);
+	FillConsoleOutputAttribute(
+		console, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE,
+		screen.dwSize.X * screen.dwSize.Y, topLeft, &written
+	);
+	SetConsoleCursorPosition(console, topLeft);
 }
