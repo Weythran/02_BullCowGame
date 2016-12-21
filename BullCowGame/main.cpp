@@ -9,6 +9,7 @@
 
 using FText = std::string;
 using int32 = int;
+using uint32 = unsigned int;
 
 void PrintIntro();
 void PlayGame();
@@ -66,7 +67,7 @@ void PlayGame() {
 		FText Guess = GetValidGuess();
 
 		// Submit valid guess to the game and receive bulls & cows counts.
-		FBullCowCount BullCowCount = BCGame.SubmitGuess(Guess);
+		FBullCowCount BullCowCount = BCGame.SubmitValidGuess(Guess);
 		// Print number of bulls and cows.
 		PrintBullCowCount(BullCowCount);
 	}
@@ -76,13 +77,13 @@ void PlayGame() {
 // Loop continually until the user gives a valid guess.
 FText GetValidGuess() {
 	EGuessStatus Status = EGuessStatus::Invalid_Status;
+	FText Guess = "";
+
 	do
 	{
 		int32 CurrentTry = BCGame.GetCurrentTry();
 		std::cout << "Try " << CurrentTry << ". Please enter a guess: ";
-		FText Guess = "";
 		getline(std::cin, Guess);
-
 		Status = BCGame.CheckGuessValidity(Guess);
 		switch (Status)
 		{
@@ -96,13 +97,16 @@ FText GetValidGuess() {
 			std::cout << "Please enter a lower-case word..." << std::endl;
 			break;
 		case EGuessStatus::Invalid_Status:
-			std::cout << "### ERROR: EGuessStatus::Invalid_Status received in GetValidGuess()! ###" << std::endl;
+			std::cout << "ERROR: EGuessStatus::Invalid_Status received in BCGame.GetValidGuess()! ###" << std::endl;
 			break;
 		default:
-			return Guess;
+			// Assume the guess is valid.
+			break;
 		}
 		std::cout << std::endl;
 	} while (Status != EGuessStatus::OK);
+
+	return Guess;
 }
 
 

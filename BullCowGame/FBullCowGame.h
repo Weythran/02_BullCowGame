@@ -3,6 +3,7 @@
 
 using FString = std::string;
 using int32 = int;
+using uint32 = unsigned int;
 
 // All values initialized to zero.
 struct FBullCowCount {
@@ -32,7 +33,7 @@ public:
 
 
 	// Counts bulls & cows and increases try #, assuming guess is valid.
-	FBullCowCount SubmitGuess(FString Guess);
+	FBullCowCount SubmitValidGuess(FString Guess);
 
 private:
 	// See constructor for initialization.

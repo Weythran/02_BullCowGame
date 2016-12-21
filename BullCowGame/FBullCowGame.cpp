@@ -2,6 +2,7 @@
 
 using FString = std::string;
 using int32 = int;
+using uint32 = unsigned int;
 
 FBullCowGame::FBullCowGame() { Reset(); }
 
@@ -53,18 +54,18 @@ EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess) const
 
 
 // Receives a valid guess, increments turn, and returns count.
-FBullCowCount FBullCowGame::SubmitGuess(FString Guess)
+FBullCowCount FBullCowGame::SubmitValidGuess(FString Guess)
 {
-	// Increment the turn number.
 	MyCurrentTry++;
 
 	// Set up a return variable.
 	FBullCowCount BullCowCount;
 
-	// Loop through all letters in the guess.
-	for (int32 i = 0; i < MyHiddenWord.length(); i++)
+	// Loop through all letters in the hidden word.
+	for (uint32 i = 0; i < MyHiddenWord.length(); i++)
 	{
-		for (int32 j = 0; j < Guess.length(); j++)
+		// Loop through all letters in the valid guess.
+		for (uint32 j = 0; j < Guess.length(); j++)
 		{
 			// Compare letters against the hidden word.
 			if ((MyHiddenWord[i]==Guess[j])&&(i==j)) // If they match in the same place.
