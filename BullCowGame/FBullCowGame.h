@@ -26,7 +26,7 @@ public:
 	int32 GetMaxTries() const; 
 	int32 GetCurrentTry() const;
 	int32 GetHiddenWordLength() const;
-	bool IsGameWon() const;
+	bool IsGameWon(FBullCowCount BullCowCount) const;
 	EGuessStatus CheckGuessValidity(FString Guess) const;
 
 	void Reset(); // TODO Make a more rich return value.

@@ -22,9 +22,9 @@ FBullCowGame BCGame; // Instantiate a new game.
 // The entry point for our application.
 int main()
 {
-	PrintIntro();
 	bool bPlayAgain = false;
 	do {
+		PrintIntro();
 		PlayGame();
 		// TODO Add a gameplay summary.
 		bPlayAgain = AskToPlayAgain();
@@ -60,17 +60,36 @@ void PrintIntro() {
 void PlayGame() {
 	BCGame.Reset();
 	int32 MaxTries = BCGame.GetMaxTries();
-	// Loop for the number of turns for the number of guesses.
-	// TODO Change from FOR to WHILE loop once we're validating tries.
-	for (int32 count = 1; count <= MaxTries; count++)
-	{
+	FBullCowCount BullCowCount;
+
+	// Loop asking for guesses while the game is not won and there are still tries remaining.
+	do {
 		FText Guess = GetValidGuess();
 
 		// Submit valid guess to the game and receive bulls & cows counts.
-		FBullCowCount BullCowCount = BCGame.SubmitValidGuess(Guess);
+		BullCowCount = BCGame.SubmitValidGuess(Guess);
 		// Print number of bulls and cows.
 		PrintBullCowCount(BullCowCount);
-	}
+		
+		if (BCGame.IsGameWon(BullCowCount) && (BCGame.GetHiddenWordLength() < 10))
+		{
+			std::cout << "###########################################################" << std::endl;
+			std::cout << "#                                                         #" << std::endl;
+			std::cout << "# CONGRATULATIONS! You have guessed the " << BCGame.GetHiddenWordLength();
+			std::cout << "-letter isogram! #" << std::endl;
+			std::cout << "#                                                         #" << std::endl;
+			std::cout << "###########################################################" << std::endl << std::endl;
+		}
+		else if (BCGame.IsGameWon(BullCowCount) && (BCGame.GetHiddenWordLength() >= 10))
+		{
+			std::cout << "############################################################" << std::endl;
+			std::cout << "#                                                          #" << std::endl;
+			std::cout << "# CONGRATULATIONS! You have guessed the " << BCGame.GetHiddenWordLength();
+			std::cout << "-letter isogram! #" << std::endl;
+			std::cout << "#                                                          #" << std::endl;
+			std::cout << "############################################################" << std::endl << std::endl;
+		}
+	} while ((BCGame.GetCurrentTry() <= MaxTries) && (!BCGame.IsGameWon(BullCowCount)));
 }
 
 
@@ -130,7 +149,7 @@ FBullCowCount PrintBullCowCount(FBullCowCount BullCowCount)
 
 bool AskToPlayAgain()
 {
-	std::cout << "Do you want to play again (y/n)?" << std::endl;
+	std::cout << "Would you like to play again (y/n)?" << std::endl;
 	FText Response = "";
 	getline(std::cin,Response);
 	std::cout << std::endl;
