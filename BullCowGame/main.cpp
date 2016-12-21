@@ -13,9 +13,9 @@ using uint32 = unsigned int;
 
 void PrintIntro();
 void PlayGame();
+void PrintGameSummary(FBullCowCount BullCowCount);
 FText GetValidGuess();
 bool AskToPlayAgain();
-FBullCowCount PrintBullCowCount(FBullCowCount BullCowCount);
 FBullCowGame BCGame; // Instantiate a new game.
 
 
@@ -26,7 +26,6 @@ int main()
 	do {
 		PrintIntro();
 		PlayGame();
-		// TODO Add a gameplay summary.
 		bPlayAgain = AskToPlayAgain();
 	} while (bPlayAgain);
 
@@ -68,28 +67,17 @@ void PlayGame() {
 
 		// Submit valid guess to the game and receive bulls & cows counts.
 		BullCowCount = BCGame.SubmitValidGuess(Guess);
-		// Print number of bulls and cows.
-		PrintBullCowCount(BullCowCount);
-		
-		if (BCGame.IsGameWon(BullCowCount) && (BCGame.GetHiddenWordLength() < 10))
-		{
-			std::cout << "###########################################################" << std::endl;
-			std::cout << "#                                                         #" << std::endl;
-			std::cout << "# CONGRATULATIONS! You have guessed the " << BCGame.GetHiddenWordLength();
-			std::cout << "-letter isogram! #" << std::endl;
-			std::cout << "#                                                         #" << std::endl;
-			std::cout << "###########################################################" << std::endl << std::endl;
-		}
-		else if (BCGame.IsGameWon(BullCowCount) && (BCGame.GetHiddenWordLength() >= 10))
-		{
-			std::cout << "############################################################" << std::endl;
-			std::cout << "#                                                          #" << std::endl;
-			std::cout << "# CONGRATULATIONS! You have guessed the " << BCGame.GetHiddenWordLength();
-			std::cout << "-letter isogram! #" << std::endl;
-			std::cout << "#                                                          #" << std::endl;
-			std::cout << "############################################################" << std::endl << std::endl;
-		}
-	} while ((BCGame.GetCurrentTry() <= MaxTries) && (!BCGame.IsGameWon(BullCowCount)));
+
+		// Print score every turn.
+		std::cout << "Your score is: bulls - " << BullCowCount.Bulls;
+		std::cout << "; cows - " << BullCowCount.Cows << ".";
+		std::cout << std::endl << std::endl;
+
+	} while ((!BCGame.IsGameWon(BullCowCount)) && (BCGame.GetCurrentTry() <= MaxTries));
+
+	PrintGameSummary(BullCowCount);
+
+	return;
 }
 
 
@@ -101,13 +89,14 @@ FText GetValidGuess() {
 	do
 	{
 		int32 CurrentTry = BCGame.GetCurrentTry();
-		std::cout << "Try " << CurrentTry << ". Please enter a guess: ";
+		std::cout << "Try #" << CurrentTry << " of " << BCGame.GetMaxTries() << ". Please enter a guess: ";
 		getline(std::cin, Guess);
 		Status = BCGame.CheckGuessValidity(Guess);
 		switch (Status)
 		{
 		case EGuessStatus::Wrong_Length:
-			std::cout << "Please enter a " << BCGame.GetHiddenWordLength() << "-letter word..." << std::endl;
+			std::cout << std::endl << "Please enter a " << BCGame.GetHiddenWordLength();
+			std::cout << "-letter word..." << std::endl;
 			break;
 		case EGuessStatus::Not_Isogram:
 			std::cout << "Please enter a word without repeating letters..." << std::endl;
@@ -129,21 +118,42 @@ FText GetValidGuess() {
 }
 
 
-// Prints the guess back to the player.
-FText PrintGuess(FText Guess) {
-	std::cout << "Your guess was: " << Guess << std::endl << std::endl;
-
-	return Guess;
-}
-
-
-FBullCowCount PrintBullCowCount(FBullCowCount BullCowCount)
+// Print a win or lose screen.
+void PrintGameSummary(FBullCowCount BullCowCount)
 {
-	std::cout << "Your score is: bulls - " << BullCowCount.Bulls;
-	std::cout << "; cows - " << BullCowCount.Cows << ".";
-	std::cout << std::endl << std::endl;
+	int32 MaxTries = BCGame.GetMaxTries();
 
-	return BullCowCount;
+	// Print a lose screen.
+	if (!(BCGame.IsGameWon(BullCowCount)) && (BCGame.GetCurrentTry() >= MaxTries))
+	{
+		std::cout << "#######################################" << std::endl;
+		std::cout << "#                                     #" << std::endl;
+		std::cout << "# GAME OVER. Better luck next time... #" << std::endl;
+		std::cout << "#                                     #" << std::endl;
+		std::cout << "#######################################" << std::endl << std::endl;
+	}
+	// Print a win screen on words shorter than 10 letters.
+	else if (BCGame.IsGameWon(BullCowCount) && (BCGame.GetHiddenWordLength() < 10))
+	{
+		std::cout << "###########################################################" << std::endl;
+		std::cout << "#                                                         #" << std::endl;
+		std::cout << "# CONGRATULATIONS! You have guessed the " << BCGame.GetHiddenWordLength();
+		std::cout << "-letter isogram! #" << std::endl;
+		std::cout << "#                                                         #" << std::endl;
+		std::cout << "###########################################################" << std::endl << std::endl;
+	}
+	// Print a win screen on words of 10 letters longer.
+	else if (BCGame.IsGameWon(BullCowCount) && (BCGame.GetHiddenWordLength() >= 10))
+	{
+		std::cout << "############################################################" << std::endl;
+		std::cout << "#                                                          #" << std::endl;
+		std::cout << "# CONGRATULATIONS! You have guessed the " << BCGame.GetHiddenWordLength();
+		std::cout << "-letter isogram! #" << std::endl;
+		std::cout << "#                                                          #" << std::endl;
+		std::cout << "############################################################" << std::endl << std::endl;
+	}
+	
+	return;
 }
 
 

@@ -4,11 +4,13 @@ using FString = std::string;
 using int32 = int;
 using uint32 = unsigned int;
 
+
 FBullCowGame::FBullCowGame() { Reset(); }
+
 
 void FBullCowGame::Reset()
 {
-	constexpr int32 MAX_TRIES = 8;
+	constexpr int32 MAX_TRIES = 3;
 	const FString HIDDEN_WORD = "planet";
 
 	MyMaxTries = MAX_TRIES;
@@ -18,9 +20,11 @@ void FBullCowGame::Reset()
 	return;
 }
 
+
 int32 FBullCowGame::GetMaxTries() const { return MyMaxTries; }
 int32 FBullCowGame::GetCurrentTry() const { return MyCurrentTry; }
 int32 FBullCowGame::GetHiddenWordLength() const { return MyHiddenWord.length(); }
+
 
 bool FBullCowGame::IsGameWon(FBullCowCount BullCowCount) const
 {
@@ -53,7 +57,7 @@ EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess) const
 }
 
 
-// Receives a valid guess, increments turn, returns count, and checks for win condition.
+// Receives a valid guess, increments turn, returns count.
 FBullCowCount FBullCowGame::SubmitValidGuess(FString Guess)
 {
 	MyCurrentTry++;

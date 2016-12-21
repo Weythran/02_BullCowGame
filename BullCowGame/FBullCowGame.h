@@ -5,11 +5,13 @@ using FString = std::string;
 using int32 = int;
 using uint32 = unsigned int;
 
+
 // All values initialized to zero.
 struct FBullCowCount {
 	int32 Bulls = 0;
 	int32 Cows = 0;
 };
+
 
 enum class EGuessStatus {
 	Invalid_Status,
@@ -18,6 +20,7 @@ enum class EGuessStatus {
 	Wrong_Length,
 	Not_Lowercase
 };
+
 
 class FBullCowGame {
 
