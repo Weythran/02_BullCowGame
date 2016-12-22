@@ -1,6 +1,12 @@
+/* The game logic. No view code or direct user interaction.
+   The game is a simple guess-the-word game based on Mastermind. 
+*/
+
 #pragma once
+
 #include <string>
 
+// To make syntax Unreal-friendly.
 using FString = std::string;
 using int32 = int;
 using uint32 = unsigned int;
@@ -32,7 +38,7 @@ public:
 	bool IsGameWon(FBullCowCount BullCowCount) const;
 	EGuessStatus CheckGuessValidity(FString Guess) const;
 
-	void Reset(); // TODO Make a more rich return value.
+	void Reset();
 
 
 	// Counts bulls & cows and increases try #, assuming guess is valid.

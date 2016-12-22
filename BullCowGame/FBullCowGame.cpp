@@ -1,7 +1,10 @@
+#pragma once
+
 #include "FBullCowGame.h"
 #include <map>
 #define TMap std::map
 
+// To make syntax Unreal-friendly.
 using FString = std::string;
 using int32 = int;
 using uint32 = unsigned int;
@@ -12,7 +15,7 @@ FBullCowGame::FBullCowGame() { Reset(); }
 
 void FBullCowGame::Reset()
 {
-	const FString HIDDEN_WORD = "dog";
+	const FString HIDDEN_WORD = "dog"; // This MUST be an isogram.
 
 	MyCurrentTry = 1;
 	MyHiddenWord = HIDDEN_WORD;
