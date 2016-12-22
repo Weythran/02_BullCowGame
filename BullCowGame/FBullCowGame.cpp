@@ -12,10 +12,8 @@ FBullCowGame::FBullCowGame() { Reset(); }
 
 void FBullCowGame::Reset()
 {
-	constexpr int32 MAX_TRIES = 3;
-	const FString HIDDEN_WORD = "planet";
+	const FString HIDDEN_WORD = "dog";
 
-	MyMaxTries = MAX_TRIES;
 	MyCurrentTry = 1;
 	MyHiddenWord = HIDDEN_WORD;
 	
@@ -23,9 +21,18 @@ void FBullCowGame::Reset()
 }
 
 
-int32 FBullCowGame::GetMaxTries() const { return MyMaxTries; }
 int32 FBullCowGame::GetCurrentTry() const { return MyCurrentTry; }
 int32 FBullCowGame::GetHiddenWordLength() const { return MyHiddenWord.length(); }
+
+
+int32 FBullCowGame::GetMaxTries() const 
+{ 
+	TMap<int32, int32>WordLengthToMaxTries
+	{ 
+		{1,3}, {2,3}, {3,4}, {4,6}, {5,8}, {6,9}, {7,11}, {8,14}, {9,20}, {10,20}
+	};
+	return WordLengthToMaxTries[MyHiddenWord.length()];
+}
 
 
 bool FBullCowGame::IsGameWon(FBullCowCount BullCowCount) const
@@ -33,12 +40,13 @@ bool FBullCowGame::IsGameWon(FBullCowCount BullCowCount) const
 	return (BullCowCount.Bulls == MyHiddenWord.length());
 }
 
+
 bool FBullCowGame::IsIsogram(FString Guess) const
 {
 	// Treat 0- or 1-letter words as isograms.
 	if (Guess.length() < 2) { return true; }
 
-	TMap <char, bool> LetterSeen; // Set up our map.
+	TMap <char, bool> LetterSeen; // Declare our map.
 	for (char Letter : Guess) // For every letter in the guess word...
 	{
 		Letter = tolower(Letter); // To be able to handle mixed case.
@@ -55,6 +63,22 @@ bool FBullCowGame::IsIsogram(FString Guess) const
 }
 
 
+bool FBullCowGame::IsLowercase(FString Guess) const
+{
+	// Treat 0-letter words as lowercase.
+	if ((Guess.length() < 1)) { return true; }
+	
+	for (char Letter : Guess)
+	{
+		if (!islower(Letter))
+		{
+			return false; // The guess is not all-lowercase.
+		}
+	}
+	return true;
+}
+
+
 EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess) const
 {
 	// If the guess isn't an isogram, return an error.
@@ -63,7 +87,7 @@ EGuessStatus FBullCowGame::CheckGuessValidity(FString Guess) const
 		return EGuessStatus::Not_Isogram;
 	}
 	// If the guess isn't all lowercase, return an error.
-	else if (false)
+	else if (!IsLowercase(Guess))
 	{
 		return EGuessStatus::Not_Lowercase;
 	}

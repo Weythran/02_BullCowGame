@@ -98,23 +98,22 @@ FText GetValidGuess() {
 		switch (Status)
 		{
 		case EGuessStatus::Wrong_Length:
-			std::cout << std::endl << "Please enter a " << BCGame.GetHiddenWordLength();
-			std::cout << "-letter word..." << std::endl;
+			std::cout << "Please enter a " << BCGame.GetHiddenWordLength();
+			std::cout << "-letter word..." << std::endl << std::endl;
 			break;
 		case EGuessStatus::Not_Isogram:
-			std::cout << std::endl << "Please enter a word without repeating letters..." << std::endl;
+			std::cout << "Please enter a word without repeating letters..." << std::endl << std::endl;
 			break;
 		case EGuessStatus::Not_Lowercase:
-			std::cout << std::endl << "Please enter a lower-case word..." << std::endl;
+			std::cout << "Please enter an all-lowercase word..." << std::endl << std::endl;
 			break;
 		case EGuessStatus::Invalid_Status:
-			std::cout << std::endl << "ERROR: EGuessStatus::Invalid_Status received in GetValidGuess()!" << std::endl;
+			std::cout << "ERROR: EGuessStatus::Invalid_Status received in GetValidGuess()!" << std::endl << std::endl;
 			break;
 		default:
 			// Assume the guess is valid.
 			break;
 		}
-		std::cout << std::endl;
 	} while (Status != EGuessStatus::OK);
 
 	return Guess;
